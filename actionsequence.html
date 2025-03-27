@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DnD Combat Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .button { display: block; width: 100%; padding: 10px; margin: 5px 0; text-align: center; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>DnD Combat Tracker</h2>
+        <p id="roundPhase">Round Phase: Start</p>
+        
+        <button class="button" onclick="selectAction('attack')">Attack</button>
+        <button class="button" onclick="selectAction('dodge')">Dodge</button>
+        <button class="button" onclick="selectAction('dash')">Dash</button>
+        <button class="button" onclick="selectAction('disengage')">Disengage</button>
+        <button class="button" onclick="selectAction('rage')">Rage</button>
+        <button class="button" onclick="selectAction('secondWind')">Second Wind</button>
+        <button class="button" onclick="selectAction('tunnelFighter')">Tunnel Fighter Stance</button>
+        <button class="button" onclick="selectAction('bootsOfSpeed')">Boots of Speed</button>
+        
+        <div id="attackSequence" class="hidden">
+            <h3>Attack Sequence</h3>
+            <p>Select weapon for attack 1:</p>
+            <button class="button" onclick="selectWeapon(1, 'greataxe')">Nyxian Greataxe</button>
+            <button class="button" onclick="selectWeapon(1, 'knuckleDusters')">Nyxian Knuckle Dusters</button>
+            <button class="button" onclick="selectWeapon(1, 'unarmedStrike')">Unarmed Strike</button>
+            <p id="attack1"></p>
+            
+            <p>Select maneuver for attack 1:</p>
+            <button class="button" onclick="selectManeuver(1, 'trip')">Trip Attack</button>
+            <button class="button" onclick="selectManeuver(1, 'goading')">Goading Attack</button>
+            <button class="button" onclick="selectManeuver(1, 'precision')">Precision Attack</button>
+            <p id="maneuver1"></p>
+            
+            <p>Select weapon for attack 2:</p>
+            <button class="button" onclick="selectWeapon(2, 'greataxe')">Nyxian Greataxe</button>
+            <button class="button" onclick="selectWeapon(2, 'knuckleDusters')">Nyxian Knuckle Dusters</button>
+            <button class="button" onclick="selectWeapon(2, 'unarmedStrike')">Unarmed Strike</button>
+            <p id="attack2"></p>
+            
+            <p>Select maneuver for attack 2:</p>
+            <button class="button" onclick="selectManeuver(2, 'trip')">Trip Attack</button>
+            <button class="button" onclick="selectManeuver(2, 'goading')">Goading Attack</button>
+            <button class="button" onclick="selectManeuver(2, 'precision')">Precision Attack</button>
+            <p id="maneuver2"></p>
+            
+            <p>Select weapon for attack 3:</p>
+            <button class="button" onclick="selectWeapon(3, 'greataxe')">Nyxian Greataxe</button>
+            <button class="button" onclick="selectWeapon(3, 'knuckleDusters')">Nyxian Knuckle Dusters</button>
+            <button class="button" onclick="selectWeapon(3, 'unarmedStrike')">Unarmed Strike</button>
+            <p id="attack3"></p>
+            
+            <p>Select maneuver for attack 3:</p>
+            <button class="button" onclick="selectManeuver(3, 'trip')">Trip Attack</button>
+            <button class="button" onclick="selectManeuver(3, 'goading')">Goading Attack</button>
+            <button class="button" onclick="selectManeuver(3, 'precision')">Precision Attack</button>
+            <p id="maneuver3"></p>
+        </div>
+
+        <button id="nextRound" class="button hidden" onclick="startNewRound()">Start Next Round</button>
+    </div>
+
+    <script>
+        let raging = false;
+        let attackCount = 0;
+        
+        function selectAction(action) {
+            document.getElementById('roundPhase').innerText = 'Round Phase: ' + action;
+            if (action === 'attack') {
+                document.getElementById('attackSequence').classList.remove('hidden');
+                attackCount = 0;
+            } else {
+                document.getElementById('attackSequence').classList.add('hidden');
+                document.getElementById('nextRound').classList.remove('hidden');
+            }
+        }
+        
+        function selectWeapon(attackNumber, weapon) {
+            let baseDamage = weapon === 'greataxe' ? 12 : weapon === 'knuckleDusters' ? 8 : 8;
+            let toHit = 10 + (raging ? 3 : 0);
+            let damage = baseDamage + 10 + (raging ? 3 : 0);
+            document.getElementById(`attack${attackNumber}`).innerText = `Attack ${attackNumber}: ${weapon} - To Hit: +${toHit}, Damage: ${damage}`;
+        }
+        
+        function selectManeuver(attackNumber, maneuver) {
+            let maneuverText = maneuver === 'trip' ? 'Trip Attack: Add Superiority Die and STR Save (DC 21)' : 
+                               maneuver === 'goading' ? 'Goading Attack: Add Superiority Die and WIS Save (DC 21)' :
+                               'Precision Attack: Add Superiority Die to Hit';
+            document.getElementById(`maneuver${attackNumber}`).innerText = maneuverText;
+        }
+        
+        function startNewRound() {
+            document.getElementById('roundPhase').innerText = 'Round Phase: Start';
+            document.getElementById('attackSequence').classList.add('hidden');
+            document.getElementById('nextRound').classList.add('hidden');
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`attack${i}`).innerText = '';
+                document.getElementById(`maneuver${i}`).innerText = '';
+            }
+        }
+    </script>
+</body>
+</html>
