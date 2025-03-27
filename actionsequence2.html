@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DnD Combat Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .button { display: block; width: 100%; padding: 10px; margin: 5px 0; text-align: center; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>DnD Combat Tracker</h2>
+        <p id="roundPhase">Select an Action</p>
+        
+        <div id="actionSelection">
+            <button class="button" onclick="selectAction('attack')">Attack</button>
+            <button class="button" onclick="selectAction('dodge')">Dodge</button>
+            <button class="button" onclick="selectAction('dash')">Dash</button>
+            <button class="button" onclick="selectAction('disengage')">Disengage</button>
+            <button class="button" onclick="selectAction('rage')">Rage</button>
+            <button class="button" onclick="selectAction('secondWind')">Second Wind</button>
+        </div>
+        
+        <div id="bonusActionSelection" class="hidden">
+            <h3>Select a Bonus Action</h3>
+            <button class="button" onclick="selectBonusAction('tunnelFighter')">Tunnel Fighter Stance</button>
+            <button class="button" onclick="selectBonusAction('bootsOfSpeed')">Boots of Speed</button>
+        </div>
+        
+        <div id="reactionSelection" class="hidden">
+            <h3>Select a Reaction</h3>
+            <button class="button" onclick="selectReaction('riposte')">Riposte</button>
+        </div>
+        
+        <div id="attackSequence" class="hidden">
+            <h3>Select Weapon</h3>
+            <button class="button" onclick="selectWeapon('greataxe')">Nyxian Greataxe</button>
+            <button class="button" onclick="selectWeapon('knuckleDusters')">Nyxian Knuckle Dusters</button>
+            <button class="button" onclick="selectWeapon('unarmedStrike')">Unarmed Strike</button>
+        </div>
+        
+        <div id="maneuverSelection" class="hidden">
+            <h3>Select Maneuver</h3>
+            <button class="button" onclick="selectManeuver('trip')">Trip Attack</button>
+            <button class="button" onclick="selectManeuver('goading')">Goading Attack</button>
+            <button class="button" onclick="selectManeuver('precision')">Precision Attack</button>
+            <button class="button" onclick="selectManeuver('pushing')">Pushing Attack</button>
+            <button class="button" onclick="selectManeuver('disarming')">Disarming Attack</button>
+        </div>
+        
+        <div id="summary" class="hidden">
+            <h3>Summary</h3>
+            <p id="attackSummary"></p>
+            <p id="maneuverSummary"></p>
+            <p>Attack Roll: d20 + 10</p>
+            <p>Damage Roll: <span id="damageRoll"></span></p>
+        </div>
+        
+        <button id="nextButton" class="button hidden" onclick="nextStep()">Next</button>
+    </div>
+    
+    <script>
+        let step = 0;
+        let selectedWeapon = "";
+        let selectedManeuver = "";
+
+        function selectAction(action) {
+            document.getElementById('actionSelection').classList.add('hidden');
+            document.getElementById('bonusActionSelection').classList.remove('hidden');
+        }
+        
+        function selectBonusAction(action) {
+            document.getElementById('bonusActionSelection').classList.add('hidden');
+            document.getElementById('reactionSelection').classList.remove('hidden');
+        }
+        
+        function selectReaction(action) {
+            document.getElementById('reactionSelection').classList.add('hidden');
+            document.getElementById('attackSequence').classList.remove('hidden');
+        }
+        
+        function selectWeapon(weapon) {
+            selectedWeapon = weapon;
+            document.getElementById('attackSequence').classList.add('hidden');
+            document.getElementById('maneuverSelection').classList.remove('hidden');
+        }
+        
+        function selectManeuver(maneuver) {
+            selectedManeuver = maneuver;
+            document.getElementById('maneuverSelection').classList.add('hidden');
+            document.getElementById('summary').classList.remove('hidden');
+            document.getElementById('attackSummary').innerText = `Weapon: ${selectedWeapon}`;
+            document.getElementById('maneuverSummary').innerText = `Maneuver: ${selectedManeuver}`;
+            document.getElementById('damageRoll').innerText = selectedWeapon === 'greataxe' ? '1d12 + STR' : '1d8 + STR';
+        }
+    </script>
+</body>
+</html>
